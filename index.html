@@ -1,0 +1,84 @@
+<html>
+<head>
+</head>
+<body>
+    <h1>Reaction Time Test</h1>
+    <h3 id="result">Result: N/A ms</h3>
+    <h3 id="best">Best: 0 ms</h3>
+    <br><br>
+    <div onclick="start()" style="width: 200px; height: 50px; border-radius: 15px; background-color: gray; text-align: center; padding-top: 25px;">Start</div>
+    <div style="width: 100vw; height: 100vh; background-color: blue; display: none; position: fixed; top: 0; left: 0;" id="color"></div>
+    <script>
+        var startdate = null;
+        var active = false;
+        var green = false;
+        var best = null;
+        var x = 0;
+        function start(){
+            if(active === true) return;
+            x++
+            var current = x
+            setTimeout(()=> { active = true; }, 10)
+            document.getElementById("color").style.display = "block"
+            document.getElementById("color").style.backgroundColor = "red"
+            
+            var max = 10
+            var min = 4
+            var num = Math.floor(Math.random() * (max - min + 1) + min);
+            
+            setTimeout(() => {
+                if(active === false) return;
+                if(x !== current) return;
+                green = true;
+                document.getElementById("color").style.backgroundColor = "green"
+                startdate = Date.now()
+            }, num * 1000)
+        }
+        
+        document.addEventListener("keydown", (e) => {
+            //if(e.key === " "){}
+            if(green === true){
+                var result = Date.now() - startdate
+                document.getElementById("result").innerHTML = `Result: ${result} ms`
+                document.getElementById("color").style.display = "none"
+                active = false;
+                green = false;
+                
+                if(result < best || best === null){
+                    best = result
+                    document.getElementById("best").innerHTML = `Best: ${result} ms`
+                }
+            } else {
+                if(active === true){
+                    document.getElementById("color").style.display = "none"
+                    active = false;
+                    green = false;
+                    document.getElementById("result").innerHTML = `Result: Invaild \(Clicked too early\) ms`
+                }
+            }
+        })
+        
+        document.onclick = function(){
+            if(green === true){
+                var result = Date.now() - startdate
+                document.getElementById("result").innerHTML = `Result: ${result} ms`
+                document.getElementById("color").style.display = "none"
+                active = false;
+                green = false;
+                
+                if(result < best || best === null){
+                    best = result
+                    document.getElementById("best").innerHTML = `Best: ${result} ms`
+                }
+            } else {
+                if(active === true){
+                    document.getElementById("color").style.display = "none"
+                    active = false;
+                    green = false;
+                    document.getElementById("result").innerHTML = `Result: Invaild \(Clicked too early\) ms`
+                }
+            }
+        }
+    </script>
+</body>
+</html>
